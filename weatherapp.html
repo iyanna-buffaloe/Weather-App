@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Iyanna's Weather App</title>
+        <link rel="stylesheet" href="./css/styles.css" />
+        <!-- google fonts!-->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class = "container">
+            <div id ="searchbar" class = "searchcontainer"></div>
+        <img src="" alt="" srcset="" id="weather-icon">
+        <div id="location"></div>
+        <div class="desc"></div>
+        <div class="weather">
+            <div class="c"></div>
+            <div class="circle"></div>
+            <div class ="time"></div>
+            <div class="circle"></div>
+            <div class="f"></div>
+        </div>
+        <div class="info">
+            <h4> <span class="sunrise"></span></h4>
+            <h4> <span class="sunset"></span></h4>
+        </div>
+        
+
+        </div>
+        
+        <script async
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBzNrcjKcXNLm2bNi_BNqcyiMd6U21F6po&libraries=places&callback">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.js"></script>
+        <script src="./js/scripts.js"></script>
+    </body>
+</html>
