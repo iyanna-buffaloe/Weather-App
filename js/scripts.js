@@ -1,6 +1,5 @@
-const api = 'AIzaSyBzoX7GDUtculpjgjcY5MxhYFZx5KPPl2s'; //googleAPI
-const timezone_api = '2L6ZH208Y2IO' // API key for timezoneDB
-const geo_api = '435565297fee48caafa9b1a27490d70d' //api for Geoapify
+const timezone_api = config.TIMEZONE_API; // API key for timezoneDB
+const geo_api = config.GEO_API; //api for Geoapify
 
 //API key for trueway geocoding
 const options = {
@@ -38,6 +37,10 @@ var weathercodes = {
     82: "Violent Rain Showers",
     85: "Slight Snow Showers",
     86: "Heavy Snow Showers",
+    95: "Slight Thunderstorm",
+    96: "Thunderstorm with slight hail",
+    99: "Thunderstorm with heavy hail"
+
 }
 
 const iconImg = document.getElementById('weather-icon');
@@ -51,6 +54,8 @@ const contain = document.querySelector('.container');
 const searchBar = document.querySelector('#searchbar'); 
 const circ = document.querySelectorAll(".circle");
 const time_display = document.querySelector(".time");
+const img_display = document.querySelector("#imgs");
+const body = document.querySelector("body");
 
 //convert time to standard time from military time 
 function convert(input) {
@@ -69,8 +74,28 @@ if (navigator.geolocation) {
         long = position.coords.longitude;
         lat = position.coords.latitude;
 
-        compute_weather(lat, long); 
-        
+        const promise1 = new Promise((resolve, reject) => {
+            compute_weather(lat, long)
+            resolve(); 
+        })
+        promise1.then((val) => {
+            img_display.innerHTML = `
+            <div class="btn btn-primary tooltip"> <img src="./photos/qmark.png" height = "27px" width = "27px" id="questionmark">
+                <div class="top">
+                 <h3>About This Page</h3>
+                 <br>
+                 <p>Hi, I'm Iyanna Buffaloe and this is a webpage that I designed to fetch 
+                 various weather information from around the world. You can search for the weather 
+                 anywhere you'd like by typing the location in the "search" bar.
+                 </p>
+             </div>
+        </div>
+            <a href= "https://github.com/iyanna-buffaloe/Weather-App/tree/master" 
+            target="_blank"><img src="./photos/ghlogo.png" 
+            width = "27px" height = "27px" alt="" srcset="" id="ghLogo" title = "GitHub Link" >`;
+
+            const image_click = document.querySelector("#img");
+        })
     });
 }
 
@@ -209,6 +234,7 @@ function addressAutocomplete(containerElement) {
         .then ((data) => {
             const temp = data.current_weather.temperature;
             const code = data.current_weather.weathercode;
+            console.log(code);
             const description = weathercodes[Number(code)];
             const srise = data.daily.sunrise[0];
             const sset = data.daily.sunset[0];
@@ -232,7 +258,7 @@ function addressAutocomplete(containerElement) {
 
             if (current_time > set_time || current_time < rise_time)
             {
-                contain.style.background = ` radial-gradient(
+                body.style.background = ` radial-gradient(
                 circle,
                 rgba(209, 111, 232, 0.6334908963585435) 0%,
                 rgba(65, 83, 210, 0.8407738095238095) 35%,
@@ -241,7 +267,7 @@ function addressAutocomplete(containerElement) {
             }
             else if (current_time < set_time && current_time > rise_time)
             {
-                contain.style.background = `radial-gradient(
+                body.style.background = `radial-gradient(
                     circle,
                     rgba(251, 242, 133, 0.6334908963585435) 0%,
                     rgba(224, 196, 91, 0.8407738095238095) 35%,

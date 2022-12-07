@@ -3,7 +3,6 @@
 *:not(#searchbar) {
     margin: 0;
     box-sizing: border-box;
-    overflow:hidden;
   }
   
 #location {
@@ -13,6 +12,7 @@
 
   body {
     font-family: 'Lora', serif;
+    background-repeat: no-repeat
   }
 
 .searchcontainer {
@@ -20,11 +20,20 @@
   bottom: 150px; 
 }
 
+#imgs {
+  position: absolute;
+  top: 90vh;
+  left: 195vh;
+  display: flex;
+  justify-content: center;
+}
+
 .addresults {
+  border-radius: 25px; 
   position: absolute;
   top: 55px; 
   width: 100vh; 
-  border-radius: 25px; 
+  overflow: hidden;
 }
 .addresults div:hover {
   background-color: rgb(189, 189, 189); 
@@ -76,4 +85,57 @@
     text-transform: capitalize;
   }
 
-  
+  #questionmark
+  {
+    margin-right: 10px;
+  }
+
+  .tooltip {
+    display:inline-block;
+    position:relative;
+    text-align:left;
+    font-family: 'Tahoma', 'Sans Serif';
+}
+
+.tooltip .top {
+    min-width:200px; 
+    top:-20px;
+    left:50%;
+    transform:translate(-50%, -100%);
+    padding:10px 20px;
+    color:#EEEEEE;
+    background-color:#666666;
+    font-weight:normal;
+    font-size:13px;
+    border-radius:8px;
+    position:absolute;
+    z-index:99999999;
+    box-sizing:border-box;
+    border:1px solid #666666;box-shadow:0 1px 8px rgba(0,0,0,0.5);
+    visibility:hidden; opacity:0; transition:opacity 0.8s;
+}
+
+.tooltip:hover .top {
+    visibility:visible; opacity:1;
+}
+
+.tooltip .top i {
+    position:absolute;
+    top:100%;
+    left:50%;
+    margin-left:-12px;
+    width:24px;
+    height:12px;
+    overflow:hidden;
+}
+
+.tooltip .top i::after {
+    content:'';
+    position:absolute;
+    width:12px;
+    height:12px;
+    left:50%;
+    transform:translate(-50%,-50%) rotate(45deg);
+    background-color:#666666;
+    border:1px solid #666666;box-shadow:0 1px 8px rgba(0,0,0,0.5);
+}
