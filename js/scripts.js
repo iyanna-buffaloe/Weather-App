@@ -94,7 +94,15 @@ if (navigator.geolocation) {
             target="_blank"><img src="./photos/ghlogo.png" 
             width = "27px" height = "27px" alt="" srcset="" id="ghLogo" title = "GitHub Link" >`;
 
-            const image_click = document.querySelector("#img");
+            document.addEventListener('click', function handleClickOutsideBox(event) {
+                // the element the user clicked
+                console.log('user clicked: ', event.target);
+              
+               
+                if (!searchBar.contains(event.target)) {
+                    remove_results();
+                }
+              });
         })
     });
 }
