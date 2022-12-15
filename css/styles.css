@@ -4,7 +4,11 @@
     margin: 0;
     box-sizing: border-box;
   }
-  
+
+.fa-github {
+  color: black; 
+}
+
 #location {
   text-align: center;
 }
@@ -25,7 +29,8 @@
   top: 90vh;
   left: 195vh;
   display: flex;
-  justify-content: center;
+  width: 65px;
+  justify-content: space-between;
 }
 
 .addresults {
@@ -85,10 +90,6 @@
     text-transform: capitalize;
   }
 
-  #questionmark
-  {
-    margin-right: 10px;
-  }
 
   .tooltip {
     display:inline-block;

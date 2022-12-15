@@ -80,7 +80,7 @@ if (navigator.geolocation) {
         })
         promise1.then((val) => {
             img_display.innerHTML = `
-            <div class="btn btn-primary tooltip"> <img src="./photos/qmark.png" height = "27px" width = "27px" id="questionmark">
+            <div class="btn btn-primary tooltip"> <i class="fa-regular fa-circle-question fa-xl"></i>
                 <div class="top">
                  <h3>About This Page</h3>
                  <br>
@@ -91,13 +91,10 @@ if (navigator.geolocation) {
              </div>
         </div>
             <a href= "https://github.com/iyanna-buffaloe/Weather-App/tree/master" 
-            target="_blank"><img src="./photos/ghlogo.png" 
-            width = "27px" height = "27px" alt="" srcset="" id="ghLogo" title = "GitHub Link" >`;
+            target="_blank"><i class="fa-brands fa-github fa-xl" title="GitHub Link"></i>`;
 
             document.addEventListener('click', function handleClickOutsideBox(event) {
                 // the element the user clicked
-                console.log('user clicked: ', event.target);
-              
                
                 if (!searchBar.contains(event.target)) {
                     remove_results();
