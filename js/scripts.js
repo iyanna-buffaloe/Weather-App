@@ -70,38 +70,13 @@ let lat;
 //accessing geolocation of user
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
-        var zone_name = ""; 
         long = position.coords.longitude;
         lat = position.coords.latitude;
-
-        const promise1 = new Promise((resolve, reject) => {
-            compute_weather(lat, long)
-            resolve(); 
-        })
-        promise1.then((val) => {
-            img_display.innerHTML = `
-            <div class="btn btn-primary tooltip"> <i class="fa-regular fa-circle-question fa-xl"></i>
-                <div class="top">
-                 <h3>About This Page</h3>
-                 <br>
-                 <p>Hi, I'm Iyanna Buffaloe and this is a webpage that I designed to fetch 
-                 various weather information from around the world. You can search for the weather 
-                 anywhere you'd like by typing the location in the "search" bar.
-                 </p>
-             </div>
-        </div>
-            <a href= "https://github.com/iyanna-buffaloe/Weather-App/tree/master" 
-            target="_blank"><i class="fa-brands fa-github fa-xl" title="GitHub Link"></i>`;
-
-            document.addEventListener('click', function handleClickOutsideBox(event) {
-                // the element the user clicked
-               
-                if (!searchBar.contains(event.target)) {
-                    remove_results();
-                }
-              });
-        })
-    });
+        load_page(lat,long);
+    },
+   function er() {
+    load_page(51.509865, -0.118092) //if the user blocks the request just randomly show them what the weather is like in London.
+   } );
 }
 
 });
@@ -314,4 +289,37 @@ function addressAutocomplete(containerElement) {
     {
         prev_rslt[i].remove();
      }
+  }
+
+  function load_page(lat, long) {
+    var zone_name = ""; 
+    const promise1 = new Promise((resolve, reject) => {
+        compute_weather(lat, long)
+        resolve(); 
+    })
+    promise1.then((val) => {
+        img_display.innerHTML = `
+        <div class="btn btn-primary tooltip"> <i class="fa-regular fa-circle-question fa-xl"></i>
+            <div class="top">
+             <h3>About This Page</h3>
+             <br>
+             <p>Hi, I'm Iyanna Buffaloe and this is a webpage that I designed to fetch 
+             various weather information from around the world. On loading the page, the default
+             destination is your location. However, if location services are blocked,
+             the page will default to showing you the weather in London, England. 
+             You can search for the weather anywhere you'd like by typing the location in the "search" bar.
+             </p>
+         </div>
+    </div>
+        <a href= "https://github.com/iyanna-buffaloe/Weather-App/tree/master" 
+        target="_blank"><i class="fa-brands fa-github fa-xl" title="GitHub Link"></i>`;
+
+        document.addEventListener('click', function handleClickOutsideBox(event) {
+            // the element the user clicked
+           
+            if (!searchBar.contains(event.target)) {
+                remove_results();
+            }
+          });
+    })
   }
