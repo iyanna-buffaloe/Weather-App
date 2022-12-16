@@ -1,14 +1,6 @@
 const timezone_api = config.TIMEZONE_API; // API key for timezoneDB
 const geo_api = config.GEO_API; //api for Geoapify
 
-//API key for trueway geocoding
-const options = {
-	method: 'GET',
-	headers: {
-		'X-RapidAPI-Key': '07b2509985msh667f86a94ba158dp1ec99ejsndc773f089f68',
-		'X-RapidAPI-Host': 'trueway-geocoding.p.rapidapi.com'
-	}
-};
 
 //weathercode dictionary
 var weathercodes = {
@@ -111,8 +103,8 @@ function addressAutocomplete(containerElement) {
       var promise = new Promise((resolve, reject) => {
         currentPromiseReject = reject;
   
-        var url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(currentValue)}&limit=5&apiKey=${geo_api}`;
-  
+        var url =  `/api/search?value=${encodeURIComponent(currentValue)}`
+
         fetch(url)
           .then(response => {
             // check if the call was successful
@@ -135,7 +127,7 @@ function addressAutocomplete(containerElement) {
                     itemElement.onclick = function select() {
                         lat = feature.properties.lat;
                         long = feature.properties.lon;
-
+                        remove_results();
                         compute_weather(lat, long);
                     }
                 })
@@ -156,131 +148,99 @@ function addressAutocomplete(containerElement) {
     });
   }
   
-  function compute_weather (latitude, longitude) {
+const compute_weather = async(latitude, longitude) => {
     //accessing Geoapify to get the location based off the latitude and longitude 
-    const geo_base = `https://api.geoapify.com/v1/geocode/reverse?lat=${latitude}&lon=${longitude}&apiKey=${geo_api}`;
+    const geo_base = `/api?la=${latitude}&lo=${longitude}`
 
-    fetch(geo_base).then((response) => {
-        return response.json();
-    })
-    .then((data) => {
-        var place = "";
-        var city = data.features[0].properties.city;
-        var state = data.features[0].properties.state; 
+    const res = await fetch(geo_base)
+    const data = await res.json(); 
 
-        if (city && state) {
-            place = `${city}, ${state}`; 
-            
-        }
-        else if (city && (!state)) {
-            place = `${city}`;
-        } 
-        else if (!(city) && state) {
-            place = `${state}`; 
-        }
-        else 
-        {
-            place = "Undefined Location"
-        }
+    var place = "";
+    var city = data.features[0].properties.city;
+    var state = data.features[0].properties.state; 
 
-        loc.textContent = place;
-    })
-
-    //accessing timezoneDB to get the timezone so it can be passed into a query
-    const timezone_base = `http://api.timezonedb.com/v2.1/get-time-zone?key=${timezone_api}&format=json&by=position&lat=${latitude}&lng=${longitude}`;
-    fetch(timezone_base).then((response) => {
-        return response.json(); 
-    })
-    .then((data) => {
-        console.log(data);
-        //getting the time so I can see if it's morning or evening later on (based on sunset)
-        var unformat_time = data.formatted; 
-        var cur_time = unformat_time.split(" ").pop(); 
-
-        zone_name = data.zoneName; 
-
-        //here, I format the zone name so that it can be passed into the query below
-        var final_zone_name = zone_name.replace(/ /g,"_"); 
-        var query_info = [final_zone_name, cur_time]; 
-        return query_info; 
-    })
-    .then((query) => {
-        const base = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=sunrise,sunset&current_weather=true&timezone=${query[0]}`;
-        fetch(base).then((response) => {
-            
-        return response.json();
-            
-        })
-        .then ((data) => {
-            const temp = data.current_weather.temperature;
-            const code = data.current_weather.weathercode;
-            console.log(code);
-            const description = weathercodes[Number(code)];
-            const srise = data.daily.sunrise[0];
-            const sset = data.daily.sunset[0];
+    if (city && state) {
+        place = `${city}, ${state}`; 
         
-            var date = srise.split("T")[0];
-            var rise_time = srise.split("T").pop(); 
-            var set_time = sset.split("T").pop();
-            
-            const sunrose = date + ", " + convert(rise_time);
-            const sunset = date + ", " + convert(set_time);
+    }
+    else if (city && (!state)) {
+        place = `${city}`;
+    } 
+    else if (!(city) && state) {
+        place = `${state}`; 
+    }
+    else 
+    {
+        place = "Undefined Location"
+    }
 
-            var current_time = query[1].slice(0, -3); //removing the seconds 
+    loc.textContent = place;
 
-            //adding the search bar CSS features now that its on the screen
-            searchBar.innerHTML = '<input id="autocomplete" class = "searchbar" placeholder="Enter a place.." type="text"/>';
-            const s_bar = document.querySelector('#autocomplete'); 
-            s_bar.style.cssText += `
-            padding: 20px;
-            `;
+    //adding the search bar CSS features now that its on the screen
+    const s_bar = document.querySelector('#autocomplete'); 
+    s_bar.style.visibility = "visible"
+    s_bar.style.cssText += `
+    padding: 20px;
+    `;
+
+    var unformat_time = data.formatted; 
+    var current_time = unformat_time.split(" ").pop(); 
+
+    const temp = data.current_weather.temperature;
+    const code = data.current_weather.weathercode;
+
+    const description = weathercodes[Number(code)];
+    const srise = data.daily.sunrise[0];
+    const sset = data.daily.sunset[0];
+
+    var date = srise.split("T")[0];
+    var rise_time = srise.split("T").pop(); 
+    var set_time = sset.split("T").pop();
+    
+    const sunrose = date + ", " + convert(rise_time);
+    const sunset = date + ", " + convert(set_time);
 
 
-            if (current_time > set_time || current_time < rise_time)
-            {
-                body.style.background = ` radial-gradient(
-                circle,
-                rgba(209, 111, 232, 0.6334908963585435) 0%,
-                rgba(65, 83, 210, 0.8407738095238095) 35%,
-                rgba(92, 129, 252, 1) 100%`
-                s_bar.style.borderColor = "blue";
-            }
-            else if (current_time < set_time && current_time > rise_time)
-            {
-                body.style.background = `radial-gradient(
-                    circle,
-                    rgba(251, 242, 133, 0.6334908963585435) 0%,
-                    rgba(224, 196, 91, 0.8407738095238095) 35%,
-                    rgba(230, 224, 113, 1) 100%`;
-                s_bar.style.borderColor = "orange";
-            }
+    if (current_time > set_time || current_time < rise_time)
+    {
+        body.style.background = ` radial-gradient(
+        circle,
+        rgba(209, 111, 232, 0.6334908963585435) 0%,
+        rgba(65, 83, 210, 0.8407738095238095) 35%,
+        rgba(92, 129, 252, 1) 100%`
+        s_bar.style.borderColor = "blue";
+    }
+    else if (current_time < set_time && current_time > rise_time)
+    {
+        body.style.background = `radial-gradient(
+            circle,
+            rgba(251, 242, 133, 0.6334908963585435) 0%,
+            rgba(224, 196, 91, 0.8407738095238095) 35%,
+            rgba(230, 224, 113, 1) 100%`;
+        s_bar.style.borderColor = "orange";
+    }
 
-            const fahrenheit = (temp * 9) / 5 + 32;
+        const fahrenheit = (temp * 9) / 5 + 32;
 
-            desc.textContent = `${description}`;
-            tempC.textContent = `${temp} °C`;
-            tempF.textContent = `${fahrenheit.toFixed(2)} °F`;
-            time_display.textContent = convert(current_time); 
+        desc.textContent = `${description}`;
+        tempC.textContent = `${temp} °C`;
+        tempF.textContent = `${fahrenheit.toFixed(2)} °F`;
+        time_display.textContent = convert(current_time); 
 
-            //adding the circles 
-            for (var i = 0; i< circ.length; i++)
-            {
-                circ[i].style.cssText = `background-color: black;
-                border-radius: 50px;
-                height: 10px;
-                width: 10px; 
-                margin: 0 15px;`
-            }
-           
-            
-            sunriseDOM.textContent = `Sunrise: ${sunrose}`;
-            sunsetDOM.textContent = `Sunset: ${sunset}`;
-            return 0; 
-        })
-        .then ((value) => { addressAutocomplete(searchBar); 
-        })
-    })
-  }
+        //adding the circles 
+        for (var i = 0; i< circ.length; i++)
+        {
+            circ[i].style.cssText = `background-color: black;
+            border-radius: 50px;
+            height: 10px;
+            width: 10px; 
+            margin: 0 15px;`
+        }
+        
+        sunriseDOM.textContent = `Sunrise: ${sunrose}`;
+        sunsetDOM.textContent = `Sunset: ${sunset}`;
+}
+
 
   function remove_results() {
     var prev_rslt = document.querySelectorAll(".addresults"); 
@@ -291,13 +251,17 @@ function addressAutocomplete(containerElement) {
      }
   }
 
-  function load_page(lat, long) {
-    var zone_name = ""; 
+function load_page(lat, long) { 
+
     const promise1 = new Promise((resolve, reject) => {
-        compute_weather(lat, long)
-        resolve(); 
+        compute_weather(lat, long);
+        resolve();
     })
+
     promise1.then((val) => {
+        
+        addressAutocomplete(searchBar)
+
         img_display.innerHTML = `
         <div class="btn btn-primary tooltip"> <i class="fa-regular fa-circle-question fa-xl"></i>
             <div class="top">
