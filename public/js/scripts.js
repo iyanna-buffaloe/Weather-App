@@ -1,6 +1,3 @@
-const timezone_api = config.TIMEZONE_API; // API key for timezoneDB
-const geo_api = config.GEO_API; //api for Geoapify
-
 
 //weathercode dictionary
 var weathercodes = {
@@ -90,6 +87,7 @@ function addressAutocomplete(containerElement) {
       
       // Cancel previous request promise
       if (currentPromiseReject) {
+        remove_results();
         currentPromiseReject({
           canceled: true
         });

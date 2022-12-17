@@ -16,7 +16,7 @@
 
   body {
     font-family: 'Lora', serif;
-    background-repeat: no-repeat
+    background-repeat: no-repeat;
   }
 
 .searchcontainer {
@@ -27,7 +27,7 @@
 #imgs {
   position: absolute;
   top: 90vh;
-  left: 195vh;
+  left: 90%;
   display: flex;
   width: 65px;
   justify-content: space-between;
