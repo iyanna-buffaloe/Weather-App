@@ -1,4 +1,42 @@
+.night {
+  background-image: linear-gradient(181deg, #3e51c9, #884da9, #b24889, #d34369);
+}
 
+.nightsbar {
+  border: solid black;
+}
+
+.nightsbar::placeholder {
+  color:rgb(189, 189, 189);
+}
+
+.day {
+  background-image: linear-gradient(152deg, #e53e15, #e7851c, #e1bc27, #d3f033);
+}
+
+.daysbar {
+  border: solid #bf310d; 
+}
+
+.rain {
+  background-image: linear-gradient(168deg, #081f26, #36554e, #679379, #9cd6a7);
+}
+
+.rainsbar {
+  border: solid black; 
+}
+
+.snow {
+  background-image: linear-gradient(187deg, #3233cf, #6670d4, #82acd8, #92e9d9);
+}
+
+.snowsbar {
+  border: solid rgb(189, 189, 189);
+}
+
+.info {
+  text-align: center;
+}
 
 *:not(#searchbar) {
     margin: 0;
@@ -15,7 +53,7 @@
   
 
   body {
-    font-family: 'Lora', serif;
+    font-family: 'Libre Franklin', serif;
     background-repeat: no-repeat;
   }
 
@@ -24,12 +62,17 @@
   bottom: 150px; 
 }
 
+#mainbody {
+  padding: 5px;
+}
+
 #imgs {
   position: absolute;
   top: 90vh;
   left: 90%;
   display: flex;
   width: 65px;
+  align-items: baseline;
   justify-content: space-between;
 }
 
@@ -55,7 +98,6 @@
   padding-left: 20px; 
   height: 55px;
   width: 65vw;
-  border-color: blue;
   border-width: 4px;
   background-color: rgba(0,0,0,0);
   color: white; 
@@ -76,20 +118,23 @@
 
   .weather {
     display: flex; 
-    align-items: center;
+    justify-content: center;
     margin: 15px 0;
     font-size: 1.5rem;
+    padding-bottom: 2%;
   }
 
   #location {
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: 800;
-    font-style: italic;
+
   }
 
   .desc {
     font-size: 1.25rem;
     text-transform: capitalize;
+    padding: 2% 0%;
+    text-align: center;
   }
 
 
@@ -97,7 +142,7 @@
     display:inline-block;
     position:relative;
     text-align:left;
-    font-family: 'Tahoma', 'Sans Serif';
+    font-family: 'Arial', 'Sans Serif';
 }
 
 .tooltip .top {
@@ -146,9 +191,10 @@
 @media only screen and (max-width: 600px) {
   #imgs {
     left:45%;
+    top: 80vh;
   }
 
   .searchbar {
-    width: 65vw;
+    width: 75vw;
   }
   }

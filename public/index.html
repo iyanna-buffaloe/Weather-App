@@ -8,8 +8,9 @@
         <title>Iyanna's Weather App</title>
         <link rel="stylesheet" href="./css/styles.css" />
         <!-- google fonts!-->
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500&display=swap" rel="stylesheet">
         <script src="https://kit.fontawesome.com/826073e3dd.js" crossorigin="anonymous"></script>
     </head>
 
@@ -18,20 +19,21 @@
             <div id ="searchbar" class = "searchcontainer">
                 <input id="autocomplete" class = "searchbar" placeholder="Enter a place.." type="text" style="visibility:hidden">
             </div>
-        <div id="location"></div>
-        <div class="desc"></div>
-        <div class="weather">
-            <div class="c"></div>
-            <div class="circle"></div>
-            <div class ="time"></div>
-            <div class="circle"></div>
-            <div class="f"></div>
+        <div id="mainbody">
+            <div id="location"></div>
+            <div class="desc"></div>
+            <div class="weather">
+                <div class="c"></div>
+                <div class="circle"></div>
+                <div class ="time"></div>
+                <div class="circle"></div>
+                <div class="f"></div>
+            </div>
+            <div class="info">
+                <h4> <span class="sunrise"></span></h4>
+                <h4> <span class="sunset"></span></h4>
+            </div>
         </div>
-        <div class="info">
-            <h4> <span class="sunrise"></span></h4>
-            <h4> <span class="sunset"></span></h4>
-        </div>
-        
 
         <div id="imgs">
         </div>

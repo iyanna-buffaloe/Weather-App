@@ -32,6 +32,9 @@ var weathercodes = {
 
 }
 
+var rainy_codes = [3, 45, 48, 51,53,55,57,56,61,63,65,66,67,80,81,82,95,96,99];
+var snow_codes = [71, 73, 75, 77, 85, 86];
+
 const iconImg = document.getElementById('weather-icon');
 const loc = document.querySelector('#location');
 const tempC = document.querySelector('.c');
@@ -199,23 +202,57 @@ const compute_weather = async(latitude, longitude) => {
     const sunset = date + ", " + convert(set_time);
 
 
-    if (current_time > set_time || current_time < rise_time)
-    {
-        body.style.background = ` radial-gradient(
-        circle,
-        rgba(209, 111, 232, 0.6334908963585435) 0%,
-        rgba(65, 83, 210, 0.8407738095238095) 35%,
-        rgba(92, 129, 252, 1) 100%`
-        s_bar.style.borderColor = "blue";
+    /*
+    the order of this if-else chain matters:
+    rain before night
+    night before snow 
+    snow or rain before sun 
+    */
+    if (rainy_codes.includes( Number(code))){ // display the rain gradient 
+      body.classList.remove("snow");
+      s_bar.classList.remove("snowsbar");
+      body.classList.remove("night");
+      s_bar.classList.remove("nightsbar");
+      body.classList.remove("day");
+      s_bar.classList.remove("daysbar");
+
+      body.classList.add("rain");
+      s_bar.classList.add("rainsbar");
     }
-    else if (current_time < set_time && current_time > rise_time)
+    else if (current_time > set_time || current_time < rise_time) //display night time gradient
     {
-        body.style.background = `radial-gradient(
-            circle,
-            rgba(251, 242, 133, 0.6334908963585435) 0%,
-            rgba(224, 196, 91, 0.8407738095238095) 35%,
-            rgba(230, 224, 113, 1) 100%`;
-        s_bar.style.borderColor = "orange";
+      body.classList.remove("snow");
+      s_bar.classList.remove("snowsbar");
+      body.classList.remove("rain");
+      s_bar.classList.remove("rainsbar");
+      body.classList.remove("day");
+      s_bar.classList.remove("daysbar");
+
+        body.classList.add("night");
+        s_bar.classList.add("nightsbar");
+    } 
+    else if (snow_codes.includes(Number(code))) { //display snow gradient 
+      body.classList.remove("night");
+      s_bar.classList.remove("nightsbar");
+      body.classList.remove("day");
+      s_bar.classList.remove("daysbar");
+      body.classList.remove("rain");
+      s_bar.classList.remove("rainsbar");
+
+      body.classList.add("snow");
+      s_bar.classList.add("snowsbar");
+    }
+    else if (current_time < set_time && current_time > rise_time) //display sunny gradient 
+    {
+      body.classList.remove("snow");
+      s_bar.classList.remove("snowsbar");
+      body.classList.remove("rain");
+      s_bar.classList.remove("rainsbar");
+      body.classList.remove("night");
+      s_bar.classList.remove("nightsbar");
+
+      body.classList.add("day");
+      s_bar.classList.add("daysbar");
     }
 
         const fahrenheit = (temp * 9) / 5 + 32;
